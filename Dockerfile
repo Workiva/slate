@@ -33,7 +33,7 @@ RUN wget https://oss.sonatype.org/content/repositories/releases/io/swagger/swagg
 RUN bash tool/generate_swagger.sh
 
 #build stage
-FROM ruby:2.5.1-alpine as builder
+FROM ruby:2.6.3-alpine as builder
 
 # bring in the code, cannot be at root, don't want name collision with middleman build dir (it's just confusing)
 WORKDIR /local-build
@@ -43,6 +43,7 @@ COPY . .
 
 # install dependencies
 RUN apk add --update nodejs nodejs-npm g++ make
+RUN gem install bundler:2.0.2
 RUN bundle install
 RUN npm config set unsafe-perm true
 RUN npm install -g widdershins@3.6.0
@@ -55,6 +56,9 @@ RUN tail -n +19 < source/includes/_swagger.md > source/includes/_swagger.md
 
 # build the app which puts the compiled html, etc into the build directory
 RUN bundle exec middleman build --clean
+
+# Remove widdershins since we only need it on the container for building
+RUN npm uninstall -g widdershins@3.6.0
 
 # run stage
 FROM amazonlinux:2
