@@ -1,0 +1,12 @@
+version: 1
+update_configs:
+  - package_manager: "ruby:bundler"
+    directory: "/"
+    update_schedule: "weekly"
+    allowed_updates:
+      - match:
+          update_type: "security"
+    commit_message:
+      prefix: "fix"
+      prefix_development: "chore"
+      include_scope: true
