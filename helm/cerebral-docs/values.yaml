@@ -111,5 +111,6 @@ readinessProbe:
 #  failureThreshold: 3
 
 labels:
+  servicecatalog.service: cerberus-docs
   automation.org-group: wdata
   servicecatalog.owner: data-prep
