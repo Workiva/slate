@@ -82,6 +82,10 @@ WORKDIR /static/
 RUN npm config set unsafe-perm true
 RUN npm install http-server -g
 
+RUN echo "http-server version"
+
+RUN http-server --version
+
 # create empty dependencies file... we have none but this is for rm
 RUN touch npm.lock
 
