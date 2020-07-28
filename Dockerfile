@@ -75,6 +75,8 @@ RUN yum update -y && \
     yum clean all && \
     rm -rf /var/cache/yum
 
+RUN npm -version
+
 # new workdir
 WORKDIR /static/
 
