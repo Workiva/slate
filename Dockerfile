@@ -64,7 +64,7 @@ RUN npm uninstall -g widdershins@3.6.0
 FROM amazonlinux:2
 
 # add the NodeSource yum repository
-RUN curl -sL https://rpm.nodesource.com/setup_10.x | bash -
+RUN curl -sL https://rpm.nodesource.com/setup_14.x | bash -
 
 #package updates
 ARG BUILD_ID
