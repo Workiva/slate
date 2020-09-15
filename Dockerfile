@@ -88,20 +88,11 @@ RUN echo "http-server version"
 
 RUN http-server --version
 
-# create empty dependencies file... we have none but this is for rm
-RUN touch npm.lock
-
 # bring the static html in
 COPY --from=builder /local-build/build/ s/cerebral-docs/
 
 # bring in the generated clients
 COPY --from=swagger-builder /local-build/source/generated/ s/cerebral-docs/generated/
-
-# bring in gem lock
-COPY --from=builder /local-build/Gemfile.lock /static/Gemfile.lock
-
-# set dependency artifact
-ARG BUILD_ARTIFACTS_AUDIT=/static/npm.lock:/static/Gemfile.lock
 
 # run as non-root user
 USER nobody
