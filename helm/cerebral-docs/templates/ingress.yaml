@@ -28,6 +28,7 @@ spec:
               serviceName: {{ template "template.fullname" $ }}
               servicePort: 8000
             path: /s/cerebral-docs/(.*)
+---
 # Redirect ingress destined for /s/wdata-docs* to the new developers.workiva.com site
 apiVersion: extensions/v1beta1
 kind: Ingress
