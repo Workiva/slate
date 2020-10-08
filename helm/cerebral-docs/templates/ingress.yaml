@@ -1,4 +1,4 @@
-{{- if .Values.ingress.rules -}}
+# Redirect ingress destined for /s/cerebral-docs* to the new developers.workiva.com site
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -10,28 +10,51 @@ metadata:
     heritage: {{ .Release.Service }}
   annotations:
     kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/rewrite-target: {{ $.Values.ingress.rewritePathPrefix }}{{ $.Values.ingress.rewritePlaceHolder }}
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      if ($uri ~ ^/s/cerebral-docs(.*)$) {
+        return 301 https://developers.workiva.com/workiva-wdata/reference;
+      }
 spec:
   tls:
-  {{- range $rule := .Values.ingress.rules }}
     - hosts:
-      - {{ $rule.subDomain }}.{{ required "ingress.clusterDomain is required" $.Values.ingress.clusterDomain }}
-      secretName: {{ default "default-ingress-cert" $rule.tlsSecret }}
-  {{- end }}
+      - h.{{ required "ingress.clusterDomain is required" .Values.ingress.clusterDomain }}
+      secretName: "default-ingress-cert"
   rules:
-  {{- range $rule := .Values.ingress.rules }}
-    - host: {{ $rule.subDomain }}.{{ $.Values.ingress.clusterDomain }}
+    - host: h.{{ .Values.ingress.clusterDomain }}
       http:
         paths:
-        {{- range $backend := $rule.backends }}
           - backend:
               serviceName: {{ template "template.fullname" $ }}
-              servicePort: {{ $backend.port }}
-            {{- if or $rule.pathPrefix $backend.path }}
-              {{- $prefix := default "" $rule.pathPrefix }}
-              {{- $path := default "" $backend.path }}
-            path: {{ clean (printf "/%s/%s" $prefix $path) }}
-            {{- end }}
-        {{- end}}
-  {{- end }}
-{{- end }}
+              servicePort: 8000
+            path: /s/cerebral-docs/(.*)
+# Redirect ingress destined for /s/wdata-docs* to the new developers.workiva.com site
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ template "template.fullname" . }}
+  labels:
+    app: {{ template "template.name" . }}
+    chart: {{ template "template.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      if ($uri ~ ^/s/wdata-docs/prep(.*)$) {
+        return 301 https://developers.workiva.com/workiva-wdata/reference;
+      }
+spec:
+  tls:
+    - hosts:
+      - h.{{ required "ingress.clusterDomain is required" .Values.ingress.clusterDomain }}
+      secretName: "default-ingress-cert"
+  rules:
+    - host: h.{{ .Values.ingress.clusterDomain }}
+      http:
+        paths:
+          - backend:
+              serviceName: {{ template "template.fullname" $ }}
+              servicePort: 8000
+            path: /s/wdata-docs/prep/(.*)
