@@ -36,23 +36,13 @@ autoscaling:
 
 # Ingress configuration
 # See: https://kubernetes.io/docs/concepts/services-networking/ingress/
+# NOTE: Ingress for this repo now just redirects /s/cerebral-docs/ and
+# /s/wdata-docs/prop/ to the new developers.workiva.net site.
+# These rules are hardcoded in the ingress.yaml file, and the only input
+# from here is the clusterDomain.
 ingress:
   # Base domain for the cluster (ex. wk-dev.wdesk.org, app.wdesk.org).
   clusterDomain: ''
-  rewritePlaceHolder: /$1
-  rewritePathPrefix: /s/cerebral-docs
-  rules:
-    # Rules for h.<clusterDomain> (ex. h.wk-dev.wdesk.org).
-    - subDomain: h
-      pathPrefix: /s/cerebral-docs/(.*)
-      backends:
-        - path: /
-          port: 8000
-    - subDomain: h
-      pathPrefix: /s/wdata-docs/prep/(.*)
-      backends:
-        - path: /
-          port: 8000
 
 # Environment variables.
 environment:
