@@ -3,36 +3,8 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-# Docker image to run.
-image:
-  registry: drydock.workiva.net
-  repo: workiva/slate
-  tag: '1514604'
-  # Uncomment to specify a full docker image for local development
-  # override: local_testing_image_name:latest
-
 # Number of pods replicas to run.
-replicas: 1
-
-# The arn of the IAM role to be given to your container
-# Example: arn:aws:iam::<account>:role/<name>
-# iamRole: ''
-
-# The minimum number of available pods during updates
-minAvailable: 50%
-
-# Autoscaling configuration, configures the horizontal pod autoscaler and pod disruption budget.
-# HPA: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-# PodDisruptionBudget: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
-autoscaling:
-  minReplicas: 1
-  maxReplicas: 10
-  # TODO: This service does not have autoscaling configured
-  # metrics:
-  # - type: cpu
-  #   average_percent: 75
-  # - type: memory
-  #   average_percent: 75
+replicas: 0
 
 # Ingress configuration
 # See: https://kubernetes.io/docs/concepts/services-networking/ingress/
@@ -43,62 +15,6 @@ autoscaling:
 ingress:
   # Base domain for the cluster (ex. wk-dev.wdesk.org, app.wdesk.org).
   clusterDomain: ''
-
-# Environment variables.
-environment:
-  TRACE_SAMPLING: ''
-
-# Resources allocated to your container.
-# See: https://kubernetes.io/docs/concepts/policy/resource-quotas/
-resources:
-   limits:
-     cpu: 0.25
-     memory: 512Mi
-   requests:
-     cpu: 0.25
-     memory: 512Mi
-
-# TODO: You should check if your application behaves correctly when it does not have root privileges.
-# The runAsRoot setting determines if your container will run with root privileges.
-# In order to improve security this should be set to false, but until there is a chance to verify
-# your application still behaves correctly, it can be set to true.
-runAsRoot: true
-
-# The readinessProbe defines when your service is considered ready for traffic.
-# It is similar to Harbour Health checks.
-# See: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
-readinessProbe:
-  httpGet:
-    path: /s/cerebral-docs/
-    port: 8000
-  initialDelaySeconds: 10
-  periodSeconds: 10
-  timeoutSeconds: 10
-
-
-# If possible you should define a livenessProbe. This check will cause your container
-# to restart if it fails a default of three times in a row.
-# See: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
-
-# Http example
-# livenessProbe:
-#  httpGet:
-#    path: /liveness_check
-#    port: 8080
-#  initialDelaySeconds: 5
-#  periodSeconds: 10
-#  timeoutSeconds: 10
-#  failureThreshold: 3
-
-# Exec example:
-# livenessProbe:
-#  exec:
-#    command:
-#      - /liveness-check.sh
-#  initialDelaySeconds: 5
-#  periodSeconds: 10
-#  timeoutSeconds: 10
-#  failureThreshold: 3
 
 labels:
   servicecatalog.service: cerberus-docs
