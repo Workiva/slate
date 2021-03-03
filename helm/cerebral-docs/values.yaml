@@ -17,6 +17,8 @@ ingress:
   clusterDomain: ''
 
 labels:
-  servicecatalog.service: cerberus-docs
-  automation.org-group: wdata
-  servicecatalog.owner: data-prep
+  servicecatalog.service: cerebral
+  servicecatalog.owner: dataprep
+  servicecatalog.org_group: solutions-development
+  servicecatalog.product_generation: nextgen
+  servicecatalog.taxonomy_component: wdata-views
